@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Tracking - Chickenza</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="script.js"></script>
+    <style>
+        .tracking-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, var(--dark-secondary) 100%);
+            padding-top: 100px;
+            padding-bottom: 60px;
+        }
+
+        .tracking-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .tracking-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .tracking-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 16px;
+        }
+
+        .tracking-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .order-status-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+            margin-bottom: 40px;
+        }
+
+        .order-number {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 32px;
+        }
+
+        .order-id {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .order-time {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .status-timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .timeline-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            z-index: 1;
+        }
+
+        .timeline-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            transition: width 0.5s ease;
+            z-index: 2;
+        }
+
+        .timeline-steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            z-index: 3;
+        }
+
+        .timeline-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .step-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+
+        .step-icon.active {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 0 30px rgba(255, 0, 110, 0.5);
+        }
+
+        .step-icon.completed {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+        }
+
+        .step-label {
+            font-weight: 600;
+            color: var(--text-primary);
+            text-align: center;
+            font-size: 0.95rem;
+        }
+
+        .step-time {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        .delivery-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-top: 40px;
+            padding-top: 32px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .info-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 24px;
+            transition: var(--transition);
+        }
+
+        .info-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .info-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+        }
+
+        .info-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .info-value {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .map-section {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+            margin-bottom: 40px;
+        }
+
+        .map-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .map-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .live-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--accent-color);
+            color: var(--dark-bg);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--dark-bg);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .map-container {
+            height: 400px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .map-placeholder {
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        .map-placeholder i {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .rider-info {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 16px;
+            backdrop-filter: blur(10px);
+        }
+
+        .rider-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .rider-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .rider-details {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .rider-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .rider-rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--accent-color);
+            font-size: 0.9rem;
+        }
+
+        .rider-contact {
+            display: flex;
+            gap: 8px;
+        }
+
+        .contact-btn {
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .contact-btn:hover {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+
+        .order-details {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+        }
+
+        .details-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+        }
+
+        .order-items {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .order-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            transition: var(--transition);
+        }
+
+        .order-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .item-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .item-details {
+            flex: 1;
+        }
+
+        .item-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .item-quantity {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .item-price {
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+
+        .order-summary {
+            padding: 24px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .summary-label {
+            color: var(--text-secondary);
+        }
+
+        .summary-value {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 2px solid rgba(255, 255, 255, 0.1);
+            margin-top: 16px;
+        }
+
+        .total-label {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .total-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 16px;
+            margin-top: 32px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 16px 24px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .help-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .help-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: var(--primary-color);
+        }
+
+        .cancel-btn {
+            background: rgba(255, 68, 68, 0.2);
+            color: #ff4444;
+            border: 1px solid rgba(255, 68, 68, 0.3);
+        }
+
+        .cancel-btn:hover {
+            background: rgba(255, 68, 68, 0.3);
+            border-color: #ff4444;
+        }
+
+        @media (max-width: 768px) {
+            .tracking-title {
+                font-size: 2rem;
+            }
+
+            .order-status-card {
+                padding: 24px;
+            }
+
+            .timeline-steps {
+                flex-direction: column;
+                gap: 24px;
+            }
+
+            .timeline-line {
+                width: 4px;
+                height: 100%;
+                top: 0;
+                left: 50%;
+            }
+
+            .timeline-progress {
+                width: 100%;
+                height: auto;
+            }
+
+            .step-icon {
+                width: 48px;
+                height: 48px;
+                font-size: 1.2rem;
+            }
+
+            .delivery-info {
+                grid-template-columns: 1fr;
+            }
+
+            .map-container {
+                height: 300px;
+            }
+
+            .rider-info {
+                position: static;
+                margin-top: 16px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <div class="logo-3d">
+                    <i class="fas fa-utensils"></i>
+                    <span>Chickenza</span>
+                </div>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="menu.html" class="nav-link">Menu</a>
+                <a href="order-history.html" class="nav-link">Orders</a>
+                <a href="profile.html" class="nav-link">Profile</a>
+            </div>
+            <div class="nav-actions">
+                <button class="cart-btn" onclick="window.location.href='menu.html'">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count">0</span>
+                </button>
+                <a href="index.html" class="login-btn">Logout</a>
+            </div>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Tracking Container -->
+    <div class="tracking-container">
+        <div class="tracking-wrapper">
+            <!-- Header -->
+            <div class="tracking-header">
+                <h1 class="tracking-title">Track Your Order</h1>
+                <p class="tracking-subtitle">Real-time updates on your delivery status</p>
+            </div>
+
+            <!-- Order Status Card -->
+            <div class="order-status-card">
+                <div class="order-number">
+                    <div class="order-id">Order #<span id="order-id">12345</span></div>
+                    <div class="order-time" id="order-time">Placed at 2:30 PM</div>
+                </div>
+
+                <!-- Status Timeline -->
+                <div class="status-timeline">
+                    <div class="timeline-line">
+                        <div class="timeline-progress" id="timeline-progress"></div>
+                    </div>
+                    <div class="timeline-steps">
+                        <div class="timeline-step">
+                            <div class="step-icon completed" id="step-confirmed">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div class="step-label">Order Confirmed</div>
+                            <div class="step-time">2:30 PM</div>
+                        </div>
+                        <div class="timeline-step">
+                            <div class="step-icon active" id="step-preparing">
+                                <i class="fas fa-utensils"></i>
+                            </div>
+                            <div class="step-label">Preparing</div>
+                            <div class="step-time">2:35 PM</div>
+                        </div>
+                        <div class="timeline-step">
+                            <div class="step-icon" id="step-ready">
+                                <i class="fas fa-box"></i>
+                            </div>
+                            <div class="step-label">Ready for Pickup</div>
+                            <div class="step-time">--:--</div>
+                        </div>
+                        <div class="timeline-step">
+                            <div class="step-icon" id="step-delivering">
+                                <i class="fas fa-truck"></i>
+                            </div>
+                            <div class="step-label">On the Way</div>
+                            <div class="step-time">--:--</div>
+                        </div>
+                        <div class="timeline-step">
+                            <div class="step-icon" id="step-delivered">
+                                <i class="fas fa-home"></i>
+                            </div>
+                            <div class="step-label">Delivered</div>
+                            <div class="step-time">--:--</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Delivery Info -->
+                <div class="delivery-info">
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="info-title">Estimated Delivery</div>
+                        <div class="info-value" id="estimated-time">3:15 PM (45 min)</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="info-title">Delivery Address</div>
+                        <div class="info-value">123 Main St, Apt 4B, New York, NY 10001</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <i class="fas fa-receipt"></i>
+                        </div>
+                        <div class="info-title">Payment Method</div>
+                        <div class="info-value">Credit Card ending in 4242</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Map Section -->
+            <div class="map-section">
+                <div class="map-header">
+                    <h2 class="map-title">Live Tracking</h2>
+                    <div class="live-badge">
+                        <div class="live-dot"></div>
+                        <span>LIVE</span>
+                    </div>
+                </div>
+                <div class="map-container">
+                    <div class="map-placeholder">
+                        <i class="fas fa-map-marked-alt"></i>
+                        <p>Interactive map would be displayed here</p>
+                        <p style="font-size: 0.9rem; margin-top: 8px;">Showing real-time delivery location</p>
+                    </div>
+                    <div class="rider-info">
+                        <div class="rider-header">
+                            <div class="rider-avatar">JD</div>
+                            <div class="rider-details">
+                                <div class="rider-name">John Driver</div>
+                                <div class="rider-rating">
+                                    <i class="fas fa-star"></i>
+                                    <span>4.8</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="rider-contact">
+                            <a href="tel:+15551234567" class="contact-btn">
+                                <i class="fas fa-phone"></i>
+                            </a>
+                            <a href="sms:+15551234567" class="contact-btn">
+                                <i class="fas fa-comment"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Details -->
+            <div class="order-details">
+                <h2 class="details-title">Order Details</h2>
+                
+                <!-- Order Items -->
+                <div class="order-items" id="order-items">
+                    <!-- Items will be populated by JavaScript -->
+                </div>
+
+                <!-- Order Summary -->
+                <div class="order-summary">
+                    <div class="summary-row">
+                        <span class="summary-label">Subtotal</span>
+                        <span class="summary-value" id="subtotal">$0.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Delivery Fee</span>
+                        <span class="summary-value" id="delivery-fee">$2.99</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Tax</span>
+                        <span class="summary-value" id="tax">$0.00</span>
+                    </div>
+                    <div class="summary-total">
+                        <span class="total-label">Total</span>
+                        <span class="total-value" id="total">$0.00</span>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button class="action-btn help-btn" onclick="getHelp()">
+                        <i class="fas fa-headset"></i>
+                        <span>Get Help</span>
+                    </button>
+                    <button class="action-btn cancel-btn" onclick="cancelOrder()">
+                        <i class="fas fa-times"></i>
+                        <span>Cancel Order</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentOrder = {};
+        let currentStep = 1; // 0: confirmed, 1: preparing, 2: ready, 3: delivering, 4: delivered
+        let progressInterval;
+
+        // Load order data
+        function loadOrderData() {
+            const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+            if (orders.length > 0) {
+                currentOrder = orders[orders.length - 1]; // Get the latest order
+                populateOrderDetails(currentOrder);
+                startProgressSimulation();
+            } else {
+                // If no orders, redirect to menu
+                window.location.href = 'menu.html';
+            }
+        }
+
+        // Populate order details
+        function populateOrderDetails(order) {
+            // Update order info
+            document.getElementById('order-id').textContent = order.id;
+            document.getElementById('order-time').textContent = `Placed at ${new Date(order.timestamp).toLocaleTimeString()}`;
+            
+            // Update estimated delivery time
+            const estimatedTime = new Date(order.estimatedDelivery);
+            document.getElementById('estimated-time').textContent = `${estimatedTime.toLocaleTimeString()} (${Math.round((estimatedTime - new Date()) / 60000)} min)`;
+
+            // Populate order items
+            const orderItems = document.getElementById('order-items');
+            orderItems.innerHTML = order.items.map(item => `
+                <div class="order-item">
+                    <img src="https://picsum.photos/seed/${item.image}/60/60" alt="${item.name}" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-quantity">Quantity: ${item.quantity}</div>
+                    </div>
+                    <div class="item-price">$${(item.price * item.quantity).toFixed(2)}</div>
+                </div>
+            `).join('');
+
+            // Calculate and update summary
+            const subtotal = order.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const tax = subtotal * 0.08;
+            const total = subtotal + (order.deliveryFee || 2.99) + tax - (order.discount || 0);
+
+            document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+            document.getElementById('delivery-fee').textContent = order.deliveryFee === 0 ? 'Free' : `$${order.deliveryFee.toFixed(2)}`;
+            document.getElementById('tax').textContent = `$${tax.toFixed(2)}`;
+            document.getElementById('total').textContent = `$${total.toFixed(2)}`;
+        }
+
+        // Start progress simulation
+        function startProgressSimulation() {
+            // Set initial progress based on order status
+            updateProgress(currentStep);
+
+            // Simulate progress updates
+            progressInterval = setInterval(() => {
+                if (currentStep < 4) {
+                    currentStep++;
+                    updateProgress(currentStep);
+                    
+                    // Update estimated time
+                    const remainingSteps = 4 - currentStep;
+                    const estimatedMinutes = remainingSteps * 10 + 5;
+                    const estimatedTime = new Date(Date.now() + estimatedMinutes * 60000);
+                    document.getElementById('estimated-time').textContent = `${estimatedTime.toLocaleTimeString()} (${estimatedMinutes} min)`;
+                } else {
+                    clearInterval(progressInterval);
+                    showNotification('Order delivered! Enjoy your meal!');
+                }
+            }, 15000); // Update every 15 seconds for demo
+        }
+
+        // Update progress display
+        function updateProgress(step) {
+            const progress = (step / 4) * 100;
+            document.getElementById('timeline-progress').style.width = `${progress}%`;
+
+            // Update step icons
+            const steps = ['confirmed', 'preparing', 'ready', 'delivering', 'delivered'];
+            steps.forEach((stepName, index) => {
+                const stepElement = document.getElementById(`step-${stepName}`);
+                if (index < step) {
+                    stepElement.className = 'step-icon completed';
+                    stepElement.innerHTML = '<i class="fas fa-check"></i>';
+                } else if (index === step) {
+                    stepElement.className = 'step-icon active';
+                    const icons = ['fa-check', 'fa-utensils', 'fa-box', 'fa-truck', 'fa-home'];
+                    stepElement.innerHTML = `<i class="fas ${icons[index]}"></i>`;
+                } else {
+                    stepElement.className = 'step-icon';
+                    const icons = ['fa-check', 'fa-utensils', 'fa-box', 'fa-truck', 'fa-home'];
+                    stepElement.innerHTML = `<i class="fas ${icons[index]}"></i>`;
+                }
+            });
+
+            // Update step times
+            const currentTime = new Date();
+            steps.forEach((stepName, index) => {
+                const stepTimeElement = document.querySelector(`#step-${stepName}`).parentElement.querySelector('.step-time');
+                if (index <= step) {
+                    const stepTime = new Date(currentTime.getTime() - (step - index) * 60000);
+                    stepTimeElement.textContent = stepTime.toLocaleTimeString();
+                }
+            });
+        }
+
+        // Get help
+        function getHelp() {
+            showNotification('Support team has been notified. We\'ll contact you shortly!');
+        }
+
+        // Cancel order
+        function cancelOrder() {
+            if (currentStep < 2) {
+                if (confirm('Are you sure you want to cancel this order?')) {
+                    // Remove order from localStorage
+                    const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+                    const updatedOrders = orders.filter(order => order.id !== currentOrder.id);
+                    localStorage.setItem('orders', JSON.stringify(updatedOrders));
+                    
+                    showNotification('Order cancelled successfully');
+                    setTimeout(() => {
+                        window.location.href = 'menu.html';
+                    }, 2000);
+                }
+            } else {
+                showNotification('Order cannot be cancelled at this stage');
+            }
+        }
+
+        // Show notification
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+                color: white;
+                padding: 16px 24px;
+                border-radius: 12px;
+                box-shadow: 0 10px 30px rgba(255, 0, 110, 0.3);
+                z-index: 10000;
+                animation: slideIn 0.3s ease-out;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Add animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadOrderData();
+            updateCartCount();
+        });
+
+        // Update cart count
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const cartCountElements = document.querySelectorAll('.cart-count');
+            cartCountElements.forEach(element => {
+                element.textContent = totalItems;
+            });
+        }
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (progressInterval) {
+                clearInterval(progressInterval);
+            }
+        });
+    </script>
+</body>
+</html>

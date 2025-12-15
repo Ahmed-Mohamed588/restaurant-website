@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Dashboard - Chickenza</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="script.js"></script>
+    <style>
+        .menu-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, var(--dark-secondary) 100%);
+            padding-top: 100px;
+        }
+
+        .menu-header {
+            padding: 60px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 25% 75%, rgba(255, 0, 110, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 25%, rgba(0, 255, 255, 0.1) 0%, transparent 50%);
+            animation: menuGradient 10s ease-in-out infinite alternate;
+        }
+
+        @keyframes menuGradient {
+            from { opacity: 0.5; }
+            to { opacity: 0.8; }
+        }
+
+        .menu-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 1;
+        }
+
+        .menu-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            justify-content: center;
+            margin-top: 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .user-details {
+            text-align: left;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .user-status {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .categories-nav {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 12px;
+            margin: 0 auto 60px;
+            max-width: 900px;
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 100px;
+            z-index: 100;
+        }
+
+        .categories-list {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-color) var(--dark-secondary);
+        }
+
+        .categories-list::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .categories-list::-webkit-scrollbar-track {
+            background: var(--dark-secondary);
+            border-radius: 3px;
+        }
+
+        .categories-list::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 3px;
+        }
+
+        .category-btn {
+            padding: 12px 24px;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .category-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+
+        .category-btn.active {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border-color: transparent;
+        }
+
+        .category-btn i {
+            font-size: 1.1rem;
+        }
+
+        .menu-section {
+            padding: 60px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        .section-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 80px;
+        }
+
+        .menu-item-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .menu-item-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(255, 0, 110, 0.2);
+            border-color: var(--primary-color);
+        }
+
+        .menu-item-image {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .menu-item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .menu-item-card:hover .menu-item-image img {
+            transform: scale(1.1);
+        }
+
+        .menu-item-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: var(--accent-color);
+            color: var(--dark-bg);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .menu-item-badge.spicy {
+            background: #ff4444;
+            color: white;
+        }
+
+        .menu-item-badge.vegetarian {
+            background: #44ff44;
+            color: var(--dark-bg);
+        }
+
+        .menu-item-content {
+            padding: 24px;
+        }
+
+        .menu-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 12px;
+        }
+
+        .menu-item-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .menu-item-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+        }
+
+        .menu-item-description {
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+        }
+
+        .menu-item-ingredients {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .ingredient-tag {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .menu-item-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .add-to-cart-btn {
+            flex: 1;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .add-to-cart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 0, 110, 0.3);
+        }
+
+        .view-details-btn {
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .view-details-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+
+        .cart-sidebar {
+            position: fixed;
+            right: -400px;
+            top: 0;
+            width: 400px;
+            height: 100vh;
+            background: var(--dark-secondary);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.3);
+            transition: var(--transition);
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-sidebar.open {
+            right: 0;
+        }
+
+        .cart-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .close-cart {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .close-cart:hover {
+            color: var(--primary-color);
+        }
+
+        .cart-items {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 16px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+
+        .cart-item-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .cart-item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .cart-item-details {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .cart-item-price {
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .quantity-btn {
+            width: 24px;
+            height: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: transparent;
+            color: var(--text-secondary);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .quantity-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .cart-footer {
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .checkout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 0, 110, 0.3);
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+        }
+
+        .empty-cart i {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        @media (max-width: 768px) {
+            .menu-title {
+                font-size: 2rem;
+            }
+
+            .categories-nav {
+                margin: 0 20px 40px;
+            }
+
+            .menu-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .cart-sidebar {
+                width: 100%;
+                right: -100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <div class="logo-3d">
+                    <i class="fas fa-utensils"></i>
+                    <span>Chickenza</span>
+                </div>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="menu.html" class="nav-link active">Menu</a>
+                <a href="#orders" class="nav-link">Orders</a>
+                <a href="profile.html" class="nav-link">Profile</a>
+            </div>
+            <div class="nav-actions">
+                <button class="cart-btn" onclick="toggleCart()">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cart-count">0</span>
+                </button>
+                <a href="index.html" class="login-btn">Logout</a>
+            </div>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Menu Container -->
+    <div class="menu-container">
+        <!-- Menu Header -->
+        <div class="menu-header">
+            <div class="container">
+                <h1 class="menu-title">Menu Dashboard</h1>
+                <p class="menu-subtitle">Explore our delicious 3D-rendered menu items</p>
+                <div class="user-info">
+                    <div class="user-avatar">JD</div>
+                    <div class="user-details">
+                        <div class="user-name">John Doe</div>
+                        <div class="user-status">Premium Member</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Categories Navigation -->
+        <div class="categories-nav">
+            <div class="categories-list">
+                <button class="category-btn active" onclick="filterCategory('all')">
+                    <i class="fas fa-th"></i>
+                    <span>All Items</span>
+                </button>
+                <button class="category-btn" onclick="filterCategory('pizza')">
+                    <i class="fas fa-pizza-slice"></i>
+                    <span>Pizza</span>
+                </button>
+                <button class="category-btn" onclick="filterCategory('chicken')">
+                    <i class="fas fa-drumstick-bite"></i>
+                    <span>Fried Chicken</span>
+                </button>
+                <button class="category-btn" onclick="filterCategory('nashville')">
+                    <i class="fas fa-pepper-hot"></i>
+                    <span>Nashville Hot</span>
+                </button>
+                <button class="category-btn" onclick="filterCategory('dessert')">
+                    <i class="fas fa-ice-cream"></i>
+                    <span>Dessert</span>
+                </button>
+                <button class="category-btn" onclick="filterCategory('drinks')">
+                    <i class="fas fa-glass-martini-alt"></i>
+                    <span>Drinks</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Pizza Section -->
+        <div class="menu-section" id="pizza-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">🍕 Pizza Collection</h2>
+                    <p class="section-description">Artisanal pizzas with fresh ingredients and perfect crust</p>
+                </div>
+                <div class="menu-grid" id="pizza-grid">
+                    <!-- Pizza items will be generated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Fried Chicken Section -->
+        <div class="menu-section" id="chicken-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">🍗 Fried Chicken</h2>
+                    <p class="section-description">Crispy, juicy, and perfectly seasoned chicken</p>
+                </div>
+                <div class="menu-grid" id="chicken-grid">
+                    <!-- Chicken items will be generated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Nashville Hot Section -->
+        <div class="menu-section" id="nashville-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">🌶️ Nashville Hot Chicken</h2>
+                    <p class="section-description">Spicy, crispy chicken with authentic Nashville heat</p>
+                </div>
+                <div class="menu-grid" id="nashville-grid">
+                    <!-- Nashville items will be generated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Dessert Section -->
+        <div class="menu-section" id="dessert-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">🍰 Desserts</h2>
+                    <p class="section-description">Sweet endings to your perfect meal</p>
+                </div>
+                <div class="menu-grid" id="dessert-grid">
+                    <!-- Dessert items will be generated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Drinks Section -->
+        <div class="menu-section" id="drinks-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">🥤 Beverages</h2>
+                    <p class="section-description">Refreshing drinks to complement your meal</p>
+                </div>
+                <div class="menu-grid" id="drinks-grid">
+                    <!-- Drink items will be generated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3 class="cart-title">Your Cart</h3>
+            <button class="close-cart" onclick="toggleCart()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <div class="empty-cart">
+                <i class="fas fa-shopping-cart"></i>
+                <p>Your cart is empty</p>
+            </div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cart-total">$0.00</span>
+            </div>
+            <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <script>
+        // Menu Data
+        const menuData = {
+            pizza: [
+                { id: 1, name: "Margherita Classic", price: 18.99, description: "Fresh mozzarella, basil, tomato sauce", ingredients: ["Mozzarella", "Basil", "Tomato Sauce", "Olive Oil"], badge: "vegetarian", image: "IMAGES/margherita-pizza.jpg" },
+                { id: 2, name: "Pepperoni Feast", price: 22.99, description: "Double pepperoni with extra cheese", ingredients: ["Pepperoni", "Mozzarella", "Tomato Sauce"], badge: "popular", image: "IMAGES/pepperoni-pizza.jpg" },
+                { id: 3, name: "Supreme Deluxe", price: 24.99, description: "Everything you love on one pizza", ingredients: ["Pepperoni", "Mushrooms", "Peppers", "Onions", "Olives"], badge: "popular", image: "IMAGES/supreme-pizza.jpg" },
+                { id: 4, name: "Hawaiian Paradise", price: 20.99, description: "Ham, pineapple, and extra cheese", ingredients: ["Ham", "Pineapple", "Mozzarella", "Tomato Sauce"], badge: null, image: "IMAGES/hawaiian-pizza.jpg" },
+                { id: 5, name: "BBQ Chicken", price: 23.99, description: "Grilled chicken with BBQ sauce", ingredients: ["Chicken", "BBQ Sauce", "Red Onions", "Cilantro"], badge: null, image: "IMAGES/bbq-chicken-pizza.jpg" },
+                { id: 6, name: "Veggie Garden", price: 19.99, description: "Fresh vegetables and herbs", ingredients: ["Bell Peppers", "Mushrooms", "Olives", "Spinach", "Feta"], badge: "vegetarian", image: "IMAGES/veggie-pizza.jpg" },
+                { id: 7, name: "Meat Lovers", price: 26.99, description: "All the meats you can imagine", ingredients: ["Pepperoni", "Sausage", "Bacon", "Ham", "Beef"], badge: "popular", image: "IMAGES/meat-lovers-pizza.jpg" },
+                { id: 8, name: "White Garlic", price: 21.99, description: "Garlic cream sauce with spinach", ingredients: ["Garlic Cream", "Spinach", "Mozzarella", "Parmesan"], badge: "vegetarian", image: "IMAGES/white-garlic-pizza.jpg" },
+                { id: 9, name: "Buffalo Chicken", price: 22.99, description: "Spicy buffalo chicken with ranch", ingredients: ["Buffalo Chicken", "Ranch", "Celery", "Blue Cheese"], badge: "spicy", image: "IMAGES/buffalo-chicken-pizza.jpg" },
+                { id: 10, name: "Mediterranean", price: 20.99, description: "Feta, olives, and sun-dried tomatoes", ingredients: ["Feta", "Olives", "Sun-dried Tomatoes", "Oregano"], badge: "vegetarian", image: "IMAGES/mediterranean-pizza.jpg" }
+            ],
+            chicken: [
+                { id: 11, name: "Classic Fried", price: 12.99, description: "Original recipe crispy fried chicken", ingredients: ["Chicken", "Flour", "Secret Spices", "Buttermilk"], badge: "popular", image: "IMAGES/classic-fried-chicken.jpg" },
+                { id: 12, name: "Crispy Wings", price: 10.99, description: "8 pieces of golden wings", ingredients: ["Chicken Wings", "Breading", "Spices"], badge: null, image: "IMAGES/crispy-wings.jpg" },
+                { id: 13, name: "Chicken Tenders", price: 11.99, description: "5 tender strips with dipping sauce", ingredients: ["Chicken Breast", "Breading", "Honey Mustard"], badge: null, image: "IMAGES/chicken-tenders.jpg" },
+                { id: 14, name: "Family Bucket", price: 29.99, description: "12 pieces with sides", ingredients: ["Mixed Pieces", "Coleslaw", "Biscuits", "Gravy"], badge: "popular", image: "IMAGES/family-bucket.jpg" },
+                { id: 15, name: "Spicy Fried", price: 13.99, description: "Crispy chicken with a kick", ingredients: ["Chicken", "Spicy Breading", "Cayenne", "Paprika"], badge: "spicy", image: "IMAGES/spicy-fried-chicken.jpg" },
+                { id: 16, name: "Honey BBQ", price: 14.99, description: "Sweet and sticky BBQ chicken", ingredients: ["Chicken", "BBQ Sauce", "Honey", "Spices"], badge: null, image: "IMAGES/honey-bbq-chicken.jpg" },
+                { id: 17, name: "Garlic Parmesan", price: 15.99, description: "Rich garlic and parmesan coating", ingredients: ["Chicken", "Garlic", "Parmesan", "Herbs"], badge: null, image: "IMAGES/garlic-parmesan-chicken.jpg" },
+                { id: 18, name: "Lemon Pepper", price: 13.99, description: "Zesty lemon and black pepper", ingredients: ["Chicken", "Lemon", "Black Pepper", "Herbs"], badge: null, image: "IMAGES/lemon-pepper-chicken.jpg" },
+                { id: 19, name: "Buttermilk Ranch", price: 14.99, description: "Creamy ranch flavor chicken", ingredients: ["Chicken", "Ranch Seasoning", "Buttermilk", "Herbs"], badge: null, image: "IMAGES/buttermilk-ranch-chicken.jpg" },
+                { id: 20, name: "Southern Style", price: 16.99, description: "Traditional southern fried chicken", ingredients: ["Chicken", "Southern Spices", "Hot Sauce", "Flour"], badge: "popular", image: "IMAGES/southern-fried-chicken.jpg" }
+            ],
+            nashville: [
+                { id: 21, name: "Nashville Hot", price: 18.99, description: "Authentic Nashville hot chicken", ingredients: ["Chicken", "Cayenne", "Paprika", "Garlic Powder"], badge: "spicy", image: "IMAGES/nashville-hot.jpg" },
+                { id: 22, name: "Medium Heat", price: 17.99, description: "Perfect balance of spice and flavor", ingredients: ["Chicken", "Medium Spices", "Brown Sugar", "Spices"], badge: "spicy", image: "IMAGES/medium-heat.jpg" },
+                { id: 23, name: "Mild Nashville", price: 16.99, description: "Nashville flavor without the heat", ingredients: ["Chicken", "Mild Spices", "Honey", "Herbs"], badge: null, image: "IMAGES/mild-nashville.jpg" },
+                { id: 24, name: "Extra Hot", price: 19.99, description: "For the brave souls only", ingredients: ["Chicken", "Ghost Pepper", "Carolina Reaper", "Spices"], badge: "spicy", image: "IMAGES/extra-hot.jpg" },
+                { id: 25, name: "Nashville Sandwich", price: 14.99, description: "Hot chicken on a brioche bun", ingredients: ["Chicken", "Pickles", "Slaw", "Brioche Bun"], badge: "popular", image: "IMAGES/nashville-sandwich.jpg" },
+                { id: 26, name: "Hot Chicken Tenders", price: 13.99, description: "5 spicy tenders with ranch", ingredients: ["Chicken Tenders", "Nashville Spice", "Ranch"], badge: "spicy", image: "IMAGES/hot-chicken-tenders.jpg" },
+                { id: 27, name: "Nashville Wings", price: 12.99, description: "8 wings with hot sauce", ingredients: ["Chicken Wings", "Nashville Sauce", "Blue Cheese"], badge: "spicy", image: "IMAGES/nashville-wings.jpg" },
+                { id: 28, name: "Chicken & Waffles", price: 15.99, description: "Hot chicken on Belgian waffles", ingredients: ["Chicken", "Waffles", "Maple Syrup", "Hot Sauce"], badge: "popular", image: "IMAGES/chicken-waffles.jpg" },
+                { id: 29, name: "Nashville Plate", price: 21.99, description: "Chicken with sides and pickles", ingredients: ["Chicken", "Mac & Cheese", "Collard Greens", "Pickles"], badge: null, image: "IMAGES/nashville-plate.jpg" },
+                { id: 30, name: "Dry Heat Style", price: 17.99, description: "Dry spice rub Nashville style", ingredients: ["Chicken", "Dry Rub", "Spices", "Herbs"], badge: "spicy", image: "IMAGES/dry-heat.jpg" }
+            ],
+            dessert: [
+                { id: 31, name: "Chocolate Lava", price: 8.99, description: "Warm chocolate cake with molten center", ingredients: ["Chocolate", "Butter", "Eggs", "Vanilla Ice Cream"], badge: "popular", image: "IMAGES/chocolate-lava.jpg" },
+                { id: 32, name: "New York Cheesecake", price: 7.99, description: "Classic creamy cheesecake", ingredients: ["Cream Cheese", "Sour Cream", "Graham Cracker", "Berries"], badge: null, image: "IMAGES/new-york-cheesecake.jpg" },
+                { id: 33, name: "Tiramisu", price: 9.99, description: "Italian coffee-flavored dessert", ingredients: ["Mascarpone", "Coffee", "Cocoa", "Ladyfingers"], badge: null, image: "IMAGES/tiramisu.jpg" },
+                { id: 34, name: "Brownie Sundae", price: 8.99, description: "Warm brownie with ice cream", ingredients: ["Brownie", "Vanilla Ice Cream", "Hot Fudge", "Nuts"], badge: "popular", image: "IMAGES/brownie-sundae.jpg" },
+                { id: 35, name: "Apple Pie", price: 7.99, description: "Traditional apple pie with cinnamon", ingredients: ["Apples", "Cinnamon", "Pie Crust", "Vanilla"], badge: null, image: "IMAGES/apple-pie.jpg" },
+                { id: 36, name: "Crème Brûlée", price: 8.99, description: "French custard with caramelized top", ingredients: ["Egg Yolks", "Cream", "Sugar", "Vanilla"], badge: null, image: "IMAGES/creme-brulee.jpg" },
+                { id: 37, name: "Ice Cream Trio", price: 6.99, description: "Three scoops of premium ice cream", ingredients: ["Vanilla", "Chocolate", "Strawberry", "Toppings"], badge: null, image: "IMAGES/ice-cream-trio.jpg" },
+                { id: 38, name: "Fruit Tart", price: 7.99, description: "Fresh seasonal fruits on pastry cream", ingredients: ["Mixed Fruits", "Pastry Cream", "Tart Shell", "Glaze"], badge: "vegetarian", image: "IMAGES/fruit-tart.jpg" },
+                { id: 39, name: "Chocolate Mousse", price: 8.99, description: "Light and airy chocolate mousse", ingredients: ["Dark Chocolate", "Eggs", "Cream", "Sugar"], badge: null, image: "IMAGES/chocolate-mousse.jpg" },
+                { id: 40, name: "Bananas Foster", price: 9.99, description: "Flambéed bananas with rum sauce", ingredients: ["Bananas", "Rum", "Brown Sugar", "Vanilla Ice Cream"], badge: "popular", image: "IMAGES/bananas-foster.jpg" }
+            ],
+            drinks: [
+                { id: 41, name: "Craft Soda", price: 3.99, description: "House-made craft sodas", ingredients: ["Natural Flavors", "Carbonated Water", "Cane Sugar"], badge: null, image: "IMAGES/craft-soda.jpg" },
+                { id: 42, name: "Fresh Lemonade", price: 4.99, description: "Freshly squeezed lemonade", ingredients: ["Lemons", "Sugar", "Water", "Mint"], badge: null, image: "IMAGES/fresh-lemonade.jpg" },
+                { id: 43, name: "Iced Coffee", price: 4.99, description: "Cold brew coffee over ice", ingredients: ["Coffee", "Ice", "Milk", "Sugar"], badge: null, image: "IMAGES/iced-coffee.jpg" },
+                { id: 44, name: "Fruit Smoothie", price: 5.99, description: "Mixed berry smoothie", ingredients: ["Berries", "Banana", "Yogurt", "Honey"], badge: "vegetarian", image: "IMAGES/fruit-smoothie.jpg" },
+                { id: 45, name: "Craft Beer", price: 6.99, description: "Local craft beer selection", ingredients: ["Hops", "Malt", "Yeast", "Water"], badge: null, image: "IMAGES/craft-beer.jpg" },
+                { id: 46, name: "House Wine", price: 8.99, description: "Red or white house wine", ingredients: ["Grapes", "Yeast", "Sulfites"], badge: null, image: "IMAGES/house-wine.jpg" },
+                { id: 47, name: "Milkshake", price: 5.99, description: "Classic vanilla milkshake", ingredients: ["Vanilla Ice Cream", "Milk", "Whipped Cream"], badge: null, image: "IMAGES/milkshake.jpg" },
+                { id: 48, name: "Fresh Juice", price: 4.99, description: "Orange, apple, or grapefruit", ingredients: ["Fresh Fruit", "No Additives"], badge: "vegetarian", image: "IMAGES/fresh-juice.jpg" },
+                { id: 49, name: "Iced Tea", price: 3.99, description: "Sweet or unsweetened iced tea", ingredients: ["Tea", "Water", "Lemon", "Sugar"], badge: null, image: "IMAGES/iced-tea.jpg" },
+                { id: 50, name: "Energy Drink", price: 4.99, description: "Natural energy booster", ingredients: ["Natural Caffeine", "Vitamins", "Fruit Juice", "Sparkling Water"], badge: null, image: "IMAGES/energy-drink.jpg" }
+            ]
+        };
+
+        // Cart Management
+        let cart = [];
+        let currentCategory = 'all';
+
+        // Initialize menu
+        function initializeMenu() {
+            // Load cart from localStorage
+            const savedCart = localStorage.getItem('cart');
+            if (savedCart) {
+                cart = JSON.parse(savedCart);
+            }
+            
+            renderMenuItems('pizza', menuData.pizza);
+            renderMenuItems('chicken', menuData.chicken);
+            renderMenuItems('nashville', menuData.nashville);
+            renderMenuItems('dessert', menuData.dessert);
+            renderMenuItems('drinks', menuData.drinks);
+            
+            // Update cart UI
+            updateCartUI();
+        }
+
+        // Render menu items
+        function renderMenuItems(category, items) {
+            const grid = document.getElementById(`${category}-grid`);
+            grid.innerHTML = items.map(item => createMenuItemCard(item, category)).join('');
+        }
+
+        // Create menu item card HTML
+        function createMenuItemCard(item, category) {
+            const badgeHtml = item.badge ? `
+                <div class="menu-item-badge ${item.badge}">
+                    ${item.badge === 'spicy' ? '<i class="fas fa-pepper-hot"></i>' : ''}
+                    ${item.badge === 'vegetarian' ? '<i class="fas fa-leaf"></i>' : ''}
+                    ${item.badge === 'popular' ? '<i class="fas fa-star"></i>' : ''}
+                    <span>${item.badge}</span>
+                </div>
+            ` : '';
+
+            return `
+                <div class="menu-item-card" data-category="${category}">
+                    <div class="menu-item-image">
+                        <img src="${item.image}" alt="${item.name}">
+                        ${badgeHtml}
+                    </div>
+                    <div class="menu-item-content">
+                        <div class="menu-item-header">
+                            <div>
+                                <h3 class="menu-item-name">${item.name}</h3>
+                                <p class="menu-item-description">${item.description}</p>
+                            </div>
+                            <div class="menu-item-price">$${item.price}</div>
+                        </div>
+                        <div class="menu-item-ingredients">
+                            ${item.ingredients.map(ing => `<span class="ingredient-tag">${ing}</span>`).join('')}
+                        </div>
+                        <div class="menu-item-actions">
+                            <button class="add-to-cart-btn" onclick="addToCart(${JSON.stringify(item).replace(/"/g, '&quot;')})">
+                                <i class="fas fa-plus"></i>
+                                <span>Add to Cart</span>
+                            </button>
+                            <button class="view-details-btn" onclick="viewDetails(${item.id})">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Add item to cart
+        function addToCart(item) {
+            const existingItem = cart.find(cartItem => cartItem.id === item.id);
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({ ...item, quantity: 1 });
+            }
+            
+            // Save cart to localStorage
+            localStorage.setItem('cart', JSON.stringify(cart));
+            
+            updateCartUI();
+            showNotification(`${item.name} added to cart!`);
+        }
+
+        // Update cart UI
+        function updateCartUI() {
+            const cartCount = document.getElementById('cart-count');
+            const cartItems = document.getElementById('cart-items');
+            const cartTotal = document.getElementById('cart-total');
+
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCount.textContent = totalItems;
+
+            if (cart.length === 0) {
+                cartItems.innerHTML = `
+                    <div class="empty-cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <p>Your cart is empty</p>
+                    </div>
+                `;
+                cartTotal.textContent = '$0.00';
+            } else {
+                cartItems.innerHTML = cart.map(item => {
+                    // Calculate item price including extras
+                    const itemPrice = item.totalPrice || (item.price * item.quantity);
+                    const unitPrice = item.basePrice || item.price;
+                    
+                    // Display extras if any
+                    let extrasDisplay = '';
+                    if (item.extras && item.extras.length > 0) {
+                        extrasDisplay = `
+                            <div class="cart-item-extras">
+                                <small>Extras: ${item.extras.map(e => e.name).join(', ')}</small>
+                            </div>
+                        `;
+                    }
+                    
+                    return `
+                        <div class="cart-item">
+                            <div class="cart-item-image">
+                                <img src="${item.image}" alt="${item.name}">
+                            </div>
+                            <div class="cart-item-details">
+                                <div class="cart-item-name">${item.name}</div>
+                                <div class="cart-item-price">$${unitPrice.toFixed(2)}</div>
+                                ${extrasDisplay}
+                            </div>
+                            <div class="cart-item-quantity">
+                                <button class="quantity-btn" onclick="updateQuantity(${item.id}, -1)">-</button>
+                                <span>${item.quantity}</span>
+                                <button class="quantity-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
+                            </div>
+                            <div class="cart-item-total">
+                                $${itemPrice.toFixed(2)}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                const total = cart.reduce((sum, item) => sum + (item.totalPrice || (item.price * item.quantity)), 0);
+                cartTotal.textContent = `$${total.toFixed(2)}`;
+            }
+        }
+
+        // Update item quantity
+        function updateQuantity(itemId, change) {
+            const item = cart.find(cartItem => cartItem.id === itemId);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    cart = cart.filter(cartItem => cartItem.id !== itemId);
+                } else {
+                    // Update total price for items with extras
+                    if (item.extras && item.extras.length > 0) {
+                        const extrasPrice = item.extras.reduce((sum, extra) => sum + extra.price, 0);
+                        item.totalPrice = (item.basePrice + extrasPrice) * item.quantity;
+                    } else {
+                        item.totalPrice = (item.basePrice || item.price) * item.quantity;
+                    }
+                }
+
+                // Save cart to localStorage
+                localStorage.setItem('cart', JSON.stringify(cart));
+
+                updateCartUI();
+            }
+        }
+
+        // Toggle cart sidebar
+        function toggleCart() {
+            const cartSidebar = document.getElementById('cart-sidebar');
+            cartSidebar.classList.toggle('open');
+        }
+
+        // Filter by category
+        function filterCategory(category) {
+            currentCategory = category;
+            
+            // Update active button
+            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.closest('.category-btn').classList.add('active');
+
+            // Show/hide sections
+            const sections = document.querySelectorAll('.menu-section');
+            sections.forEach(section => {
+                if (category === 'all') {
+                    section.style.display = 'block';
+                } else {
+                    section.style.display = section.id === `${category}-section` ? 'block' : 'none';
+                }
+            });
+        }
+
+        // View item details
+        function viewDetails(itemId) {
+            // Find item across all categories
+            let item = null;
+            for (const category in menuData) {
+                item = menuData[category].find(i => i.id === itemId);
+                if (item) break;
+            }
+            
+            if (item) {
+                // Store item details and redirect to detail page
+                localStorage.setItem('selectedItem', JSON.stringify(item));
+                window.location.href = 'item-detail.html';
+            }
+        }
+
+        // Checkout
+        function checkout() {
+            if (cart.length === 0) {
+                showNotification('Your cart is empty!');
+                return;
+            }
+            
+            // Store cart data and redirect to checkout
+            localStorage.setItem('cart', JSON.stringify(cart));
+            showNotification('Proceeding to checkout...');
+            setTimeout(() => {
+                window.location.href = 'checkout.html';
+            }, 1500);
+        }
+
+        // Show notification
+        function showNotification(message) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+                color: white;
+                padding: 16px 24px;
+                border-radius: 12px;
+                box-shadow: 0 10px 30px rgba(255, 0, 110, 0.3);
+                z-index: 10000;
+                animation: slideIn 0.3s ease-out;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Add animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', initializeMenu);
+    </script>
+</body>
+</html>
